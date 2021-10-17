@@ -1,0 +1,2 @@
+INFO  2021/10/17 05:34:26  revel  revel.go:124: Paths                                   revel=/go/pkg/mod/github.com/revel/revel@v1.0.0 base=/go/src/app app=/go/src/app/app views=/go/src/app/app/views  
+INFO  2021/10/17 05:35:32  revel  revel.go:124: Paths                                   app=/go/src/app/app views=/go/src/app/app/views   revel=/go/pkg/mod/github.com/revel/revel@v1.0.0 base=/go/src/app

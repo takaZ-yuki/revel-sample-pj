@@ -1,0 +1,48 @@
+version: '3.8'
+services:
+
+  revel-mysql:
+    image: mysql:5.7
+    container_name: revel-mysql
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: revel_sample
+      MYSQL_USER: user
+      MYSQL_PASSWORD: user123
+      MYSQL_ROOT_PASSWORD: password
+    # MySQLの文字コードを指定する
+    volumes:
+      # DBデータの永続化
+      - "./Docker/mysql/data:/var/lib/mysql"
+      # MySQL起動時にDBを作成し、初期データの投入する
+      - "./Docker/mysql/sql:/docker-entrypoint-initdb.d"
+      - "./Docker/mysql/my.cnf:/etc/mysql/conf.d/etc-mysql.cnf"
+
+  revel-go:
+    build:
+      context: .
+      dockerfile: ./Docker/Dockerfile
+    container_name: revel-go
+    ports:
+      - "9000:9000"
+    volumes:
+      - ./app:/go/src/app
+    tty: true
+    command: bash /go/src/start.sh
+
+  revel-phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: revel-phpmyadmin
+    restart: always
+    environment:
+      - PMA_ARBITRARY=1
+      - PMA_HOST=revel-mysql
+      - PMA_USER=root
+      - PMA_PASSWORD=password
+    links:
+      - revel-mysql
+    ports:
+      - 8080:80
+    volumes:
+      - /sessions
